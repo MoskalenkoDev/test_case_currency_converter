@@ -1,0 +1,33 @@
+.overrideClass.MuiInput-underline:hover:not(.Mui-disabled):before {
+    border-bottom-width: 1px;
+}
+
+.overrideClass .MuiSelect-standard:focus {
+    background-color: transparent;
+}
+
+.overrideClass .MuiSelect-standard {
+    padding-left: 4px;
+}
+
+.overrideClass .MuiInputAdornment-positionStart {
+    position: absolute;
+}
+
+.overrideClass .MuiInput-input svg{
+    margin-bottom: -1px !important;
+}
+
+.overrideClass .MuiInput-input img {
+    margin-bottom: 0px !important;
+}
+
+.overrideMenu .MuiList-padding {
+    padding: 0px !important;
+}
+
+.overrideMenuItem.MuiMenuItem-root {
+    display: flex;    
+    align-items: center;
+    padding: 6px 12px;
+}

@@ -1,0 +1,14 @@
+.overrideInput.MuiInput-underline:hover:not(.Mui-disabled):before {
+    border-bottom-width: 1px;
+}
+
+/* .overrideClass .MuiSelect-standard:select {
+    background-color: transparent;
+} */
+
+.overrideInput .MuiInput-input::placeholder {
+    text-align: end;
+}
+.overrideInput .MuiInput-input { 
+    text-align: end;
+}
