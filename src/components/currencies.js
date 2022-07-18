@@ -1,6 +1,6 @@
 import {ReactComponent as DollarIcon} from '../icons/dollar.svg';
-import {ReactComponent as EuroIcon} from '../icons/euro2.svg';
-import {ReactComponent as HryvniaIcon} from '../icons/hryvnia2.svg';
+import {ReactComponent as EuroIcon} from '../icons/euro.svg';
+import {ReactComponent as HryvniaIcon} from '../icons/hryvnia.svg';
 import Flag from 'react-world-flags'
 
 const iconsStyle = {

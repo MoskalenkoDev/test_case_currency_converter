@@ -1,6 +1,5 @@
-import { useRef, useEffect, useState } from 'react';
 import {FormControl,Input} from '@mui/material';
-import './CurrencyInput.css';
+import '../../styles/CurrencyInput.css';
 
 const CurrencyInput = ({inputValue, setInputValue, changeInputValue, disabled}) => {
 
@@ -17,6 +16,7 @@ const CurrencyInput = ({inputValue, setInputValue, changeInputValue, disabled}) 
         });
 
         newStr.forEach((el) => { // here we remove unnecessary zeros
+            if(finalArr[finalArr.length - 3] === '.') return;
             if(el === '.' || el === '-') finalArr.push(el);
             else if(el === '0' && ((finalArr[0] === '-' && finalArr.length === 1 ) || !finalArr.length || finalArr.includes('.') || /[1-9]/.test(finalArr.join(''))) ) finalArr.push(el);
             else if(/[1-9]/.test(finalArr.join('')) || finalArr.includes('.') || finalArr.length === 1 && finalArr[0] !== '0' ) finalArr.push(el);

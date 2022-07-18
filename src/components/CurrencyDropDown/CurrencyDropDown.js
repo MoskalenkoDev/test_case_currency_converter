@@ -1,9 +1,9 @@
-import { useRef, useEffect, useState } from 'react';
-import { Box, TextField, MenuItem, FormControl, InputLabel, Select, Input, ListItemIcon, SvgIcon } from '@mui/material';
+import { useRef, useState } from 'react';
+import {  MenuItem, FormControl, Select, } from '@mui/material';
 import { currencies } from '../currencies';
-import './CurrencyDropDown.css';
+import '../../styles/CurrencyDropDown.css';
 
-const CurrencyDropDown = ({currency, setCurrency}) => {
+const CurrencyDropDown = ({currency, setCurrency, disabled}) => {
 
     const [focused, setFocused] = useState(false);
 
@@ -22,13 +22,14 @@ const CurrencyDropDown = ({currency, setCurrency}) => {
             <Select
                 id="outlined-select-currency"
                 ref={selectRef}
-                className={"overrideClass"}
+                className={"overrideSelect"}
                 value={currency}
                 onChange={handleChange}
                 onOpen={handleChangeFocused}
                 onClose={handleChangeFocused}
                 variant="standard"
                 MenuProps={{ anchorEl: selectRef.current, className: "overrideMenu" }}
+                disabled= {disabled}
             >
                 {currencies.map((option) => (
                     <MenuItem key={option.value} value={option.value} divider className='overrideMenuItem'>

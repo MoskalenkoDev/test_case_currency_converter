@@ -2,10 +2,6 @@
     border-bottom-width: 1px;
 }
 
-/* .overrideClass .MuiSelect-standard:select {
-    background-color: transparent;
-} */
-
 .overrideInput .MuiInput-input::placeholder {
     text-align: end;
 }

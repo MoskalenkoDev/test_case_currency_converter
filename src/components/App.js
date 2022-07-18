@@ -1,40 +1,24 @@
 import CurrencyConverter from "./CurrencyConverter/CurrencyConverter";
 import Header from "./Header/Header";
+import { useState } from 'react';
 import '../styles/app.css'
 import { Container } from "@mui/system";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
-
-const theme = createTheme({
-  palette: {
-    neutral: {
-      main: pink[900],
-      contrastText: 'white',
-    },
-  },
-});
+import { ThemeProvider } from "@mui/material/styles";
+import { containerStyles } from "../styles/ContainerStyles";
+import { theme } from "../styles/mainTheme";
 
 function App() {
+  const [currencyRates, setCurrencyRates] = useState(null);
   return (
     <ThemeProvider theme={theme}>
-      <div className="app">
-        <Header />
-
+        <Header currencyRates= {currencyRates}/>
         <Container
           maxWidth="xl"
-          sx={{
-            display: "flex",
-            flexDirection: 'column',
-            justifyContent: "center",
-            alignItems: "center",
-            height: "100%"
-          }}
+          sx={containerStyles}
         >
-          <CurrencyConverter />
+          <CurrencyConverter currencyRates= {currencyRates} setCurrencyRates= {setCurrencyRates}/>
         </Container>
-
-      </div>
     </ThemeProvider>
-
   );
 }
 

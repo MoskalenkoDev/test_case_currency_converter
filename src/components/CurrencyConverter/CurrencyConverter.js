@@ -1,41 +1,14 @@
-import { useRef, useEffect, useState } from 'react';
-import { Box, TextField, MenuItem, FormControl, InputLabel, Select, Input, ListItemIcon, Button } from '@mui/material';
-import { pink } from '@mui/material/colors';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { useEffect, useState } from 'react';
+import { Box, Button } from '@mui/material';
 import CurrencyDropDown from '../CurrencyDropDown/CurrencyDropDown';
 import { currencies } from '../currencies';
 import ImportExportIcon from '@mui/icons-material/ImportExport';
 import CurrencyInput from '../CurrencyInput/CurrencyInput';
+import { boxInputWrapperStyles, buttonStyles, rateViewStyles } from '../../styles/CurrencyConverterStyles'; 
+import { RatesController } from '../../controllers/RatesController';
+import { convertCurrency } from '../../helpingFunctions/convertCurrency';
 
-
-const boxInputWrapperStyles = {
-
-    border: `1px solid ${pink[900]}`,
-    borderRadius: "8px",
-    p: 2,
-    display: 'flex',
-    flexDirection: 'column',
-}
-
-const theme = createTheme({
-    palette: {
-        neutral: {
-            main: pink[900],
-            contrastText: 'white',
-        },
-    },
-});
-
-const buttonStyles = [
-    {
-        '& .MuiButton-startIcon': { mr: 0, ml: 0 }
-    },
-    {
-        minWidth: '56px ', minHeight: '40px',
-    }
-];
-
-const CurrencyConverter = () => {
+const CurrencyConverter = ({currencyRates, setCurrencyRates}) => {
 
     const [mainCurrency, setMainCurrency] = useState('USD');
     const [secondaryCurrency, setSecondaryCurrency] = useState('UAH');
@@ -44,14 +17,7 @@ const CurrencyConverter = () => {
     const [mainInputValue, setMainInputValue] = useState('');
     const [secondaryInputValue, setSecondaryInputValue] = useState('');
 
-    const [currencyRates, setCurrencyRates] = useState(null);
 
-
-    const convertCurrency = (mainCurrency, secondaryCurrency, countOfMoney, jsonResponse) => {
-        let convertedMoney = 0;
-        convertedMoney = countOfMoney / jsonResponse.rates[mainCurrency] * jsonResponse.rates[secondaryCurrency];
-        return Number(convertedMoney.toFixed(2));
-    }
 
     const onBtnClick = () => {
         let [mainSwitchedCurrency, secondarySwitchedCurrency] = [secondaryCurrency, mainCurrency];
@@ -63,20 +29,9 @@ const CurrencyConverter = () => {
     }
 
     const getCurrencyRates = async () => {
-
-        const myHeaders = new Headers();
-        myHeaders.append("apikey", "Gh7il0pgx8KsFLI6qqNhdaKsKE0scuRP");
-
-        const requestOptions = {
-            method: 'GET',
-            redirect: 'follow',
-            headers: myHeaders
-        };
-
-        let response = await fetch(`https://api.apilayer.com/exchangerates_data/latest?symbols=USD,UAH,EUR&base=USD`, requestOptions);
-        let jsonResponse = await response.json();
-        setCurrencyRates(jsonResponse);
-        let rate = convertCurrency(mainCurrency, secondaryCurrency, 1, jsonResponse);
+        let response = await RatesController.getCurrencyRates();
+        setCurrencyRates(response);
+        let rate = convertCurrency(mainCurrency, secondaryCurrency, 1, response);
         setCurrentRate(rate);
     }
 
@@ -88,41 +43,44 @@ const CurrencyConverter = () => {
         if (currencyRates) {
             let rate = convertCurrency(mainCurrency, secondaryCurrency, 1, currencyRates);
             setCurrentRate(rate);
-            let convertedValue = convertCurrency(mainCurrency, secondaryCurrency, Number(mainInputValue), currencyRates);
+            let convertedValue = convertCurrency(mainCurrency, secondaryCurrency, mainInputValue, currencyRates);
             setSecondaryInputValue(convertedValue ? convertedValue: "");
         }
     }, [mainCurrency, secondaryCurrency])
 
     const changeMainValue = (currentValue) => {
-        let convertedValue = convertCurrency(mainCurrency, secondaryCurrency, Number(currentValue), currencyRates);
+        let convertedValue = convertCurrency(mainCurrency, secondaryCurrency, currentValue, currencyRates);
         setSecondaryInputValue(convertedValue ? convertedValue: "");
     }
 
     const changeSecondaryValue = (currentValue) => {
-        let convertedValue = convertCurrency(secondaryCurrency, mainCurrency, Number(currentValue), currencyRates);
+        let convertedValue = convertCurrency(secondaryCurrency, mainCurrency, currentValue, currencyRates);
         setMainInputValue(convertedValue ? convertedValue: "");
     }
 
+    const isDisabled = !currencyRates;
     return (
         <Box sx={boxInputWrapperStyles}>
 
-            <Box sx={{ mb: 2, minWidth: "120px" }}>
-                <CurrencyDropDown currency={mainCurrency} setCurrency={setMainCurrency} />
-                <CurrencyInput inputValue={mainInputValue} setInputValue={setMainInputValue} changeInputValue = {changeMainValue} disabled= {!currencyRates}/>
+            <Box sx={{ mb: 2}}>
+                <CurrencyDropDown currency={mainCurrency} setCurrency={setMainCurrency}  disabled= {isDisabled}/>
+                <CurrencyInput inputValue={mainInputValue} setInputValue={setMainInputValue} changeInputValue = {changeMainValue} disabled= {isDisabled}/>
             </Box>
 
             <Box sx={{ mb: 2, display: 'flex', justifyContent: "space-between" }}>
-                <ThemeProvider theme={theme}>
-                    <Button variant='outlined' startIcon={<ImportExportIcon />} sx={buttonStyles} color='neutral' onClick={onBtnClick} />
-                    <Box sx={{ p: "12px", display: 'flex', alignItems: "center" }} bgcolor='ButtonShadow'>
-                        {`1`}{currencies.find(el => el.value === mainCurrency).currencyIcon({ height: "15px" })} {' = '} {currentRate} {currencies.find(el => el.value === secondaryCurrency).currencyIcon({ height: "15px" })}
+                    <Button variant='outlined' startIcon={<ImportExportIcon />} sx={buttonStyles} color='neutral' onClick={onBtnClick} disabled= {isDisabled}/>
+                    <Box sx={rateViewStyles} bgcolor='ButtonShadow'>
+                        {`1`}
+                        {currencies.find(el => el.value === mainCurrency).currencyIcon({ height: "15px" })} 
+                        {' = '} 
+                        {currentRate} 
+                        {currencies.find(el => el.value === secondaryCurrency).currencyIcon({ height: "15px" })}
                     </Box>
-                </ThemeProvider>
             </Box >
 
             <Box>
-                <CurrencyDropDown currency={secondaryCurrency} setCurrency={setSecondaryCurrency} />
-                <CurrencyInput inputValue={secondaryInputValue} setInputValue={setSecondaryInputValue} changeInputValue={changeSecondaryValue} disabled= {!currencyRates}/>
+                <CurrencyDropDown currency={secondaryCurrency} setCurrency={setSecondaryCurrency} disabled= {isDisabled}/>
+                <CurrencyInput inputValue={secondaryInputValue} setInputValue={setSecondaryInputValue} changeInputValue={changeSecondaryValue} disabled= {isDisabled}/>
             </Box>
 
         </Box >

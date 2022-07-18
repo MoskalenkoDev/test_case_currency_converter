@@ -1,24 +1,24 @@
-.overrideClass.MuiInput-underline:hover:not(.Mui-disabled):before {
+.overrideSelect.MuiInput-underline:hover:not(.Mui-disabled):before {
     border-bottom-width: 1px;
 }
 
-.overrideClass .MuiSelect-standard:focus {
+.overrideSelect .MuiSelect-standard:focus {
     background-color: transparent;
 }
 
-.overrideClass .MuiSelect-standard {
+.overrideSelect .MuiSelect-standard {
     padding-left: 4px;
 }
 
-.overrideClass .MuiInputAdornment-positionStart {
+.overrideSelect .MuiInputAdornment-positionStart {
     position: absolute;
 }
 
-.overrideClass .MuiInput-input svg{
+.overrideSelect .MuiInput-input svg{
     margin-bottom: -1px !important;
 }
 
-.overrideClass .MuiInput-input img {
+.overrideSelect .MuiInput-input img {
     margin-bottom: 0px !important;
 }
 

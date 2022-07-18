@@ -1,15 +1,15 @@
 import React from 'react';
-import { pink } from '@mui/material/colors';
 import CurrencyExchangeIcon from '@mui/icons-material/CurrencyExchange';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import EuroOutlinedIcon from '@mui/icons-material/EuroOutlined';
 import { AppBar, Box, Toolbar, Typography, Container } from '@mui/material';
-import { styledBox, styledTypography } from './HeaderStyles';
+import { styledBox, styledTypography } from '../../styles/HeaderStyles';
+import { convertCurrency } from '../../helpingFunctions/convertCurrency';
 
-const Header = () => {
-
+const Header = ({currencyRates}) => {
+    console.log(currencyRates)
     return (
-        <AppBar position="static" sx={{ bgcolor: pink[900] }}>
+        <AppBar position="static" color= 'neutral'>
             <Container maxWidth='xl'>
                 <Toolbar disableGutters>
                     <CurrencyExchangeIcon sx={{ mr: 1, fontSize: '1.9rem' }} />
@@ -34,7 +34,7 @@ const Header = () => {
                                 sx={styledTypography}
                                 component="span"
                             >
-                                36.4963 / 36.4923
+                                {currencyRates?.rates['UAH'].toFixed(2) || '0000'}
                             </Typography>
                         </Box>
 
@@ -46,7 +46,7 @@ const Header = () => {
                                 sx={styledTypography}
                                 component="span"
                             >
-                                37.4463 / 39.4953
+                                {currencyRates ? convertCurrency("EUR","UAH", 1, currencyRates) : '0000'}
                             </Typography>
                         </Box>
                     </Box>
